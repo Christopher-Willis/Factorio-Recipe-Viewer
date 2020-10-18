@@ -3,22 +3,34 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  let fileReader
+
+  const handelFileRead = (e) => {
+    const content = fileReader.result
+    let json = JSON.parse(content);
+    for (const [key, value] of Object.entries(json)) {
+      console.log(`${key}`);
+    }
+  }
+
+  const hadleFileChosen = (file) => {
+    if(!file){
+      return 
+    }
+    fileReader = new FileReader();
+    fileReader.onloadend = handelFileRead;
+    fileReader.readAsText(file)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type='file'
+        id='file'
+        className='input-file'
+        accept='.json'
+        onChange = {e=> hadleFileChosen(e.target.files[0])}
+      />
     </div>
   );
 }
